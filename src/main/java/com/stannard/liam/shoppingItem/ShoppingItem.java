@@ -3,12 +3,12 @@ package com.stannard.liam.shoppingItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stannard.liam.shoppingList.ShoppingList;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-
-
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table(name = "shopping_list_item")
@@ -18,21 +18,19 @@ public class ShoppingItem
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "shopping_list_id") //nullable = false
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "shopping_list_id", referencedColumnName = "id", nullable = false) //
     private ShoppingList shoppingList;
 
-    ShoppingItem()
+    public ShoppingItem()
     {
 
     }
 
-    ShoppingItem(String name)
+    public ShoppingItem(String name, ShoppingList shoppingList)
     {
         this.name = name;
+        this.shoppingList = shoppingList;
     }
 
     public ShoppingList getShoppingList()
@@ -64,6 +62,9 @@ public class ShoppingItem
     {
         this.id = id;
     }
+    @Override
+    public String toString()
+    {
+        return "Id: " + id + "\tname: " + this.name;
+    }
 }
-
-

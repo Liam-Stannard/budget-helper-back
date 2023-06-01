@@ -1,58 +1,56 @@
 package com.stannard.liam.shoppingList;
 
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/v1/shopping-lists")
+
 public class ShoppingListController
 {
-    private final ShoppingListRepository repository;
+    @Autowired
+    private final ShoppingListRepository shoppingListRepository;
+    @Autowired
+    private final ShoppingListService shoppingListService;
 
-    private final ShoppingListAssembler assembler;
-
-    ShoppingListController(ShoppingListRepository repository, ShoppingListAssembler assembler)
+    public ShoppingListController(ShoppingListRepository shoppingListRepository, ShoppingListService shoppingListService)
     {
-        this.repository = repository;
-        this.assembler = assembler;
+        this.shoppingListRepository = shoppingListRepository;
+        this.shoppingListService = shoppingListService;
     }
 
-    @GetMapping("/shopping-lists")
-    CollectionModel<EntityModel<ShoppingList>> all()
+    @GetMapping("/")
+    public List<ShoppingList> getShoppingLists()
     {
-        List<EntityModel<ShoppingList>> shoppingLists = repository.findAll().stream()
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
-
-        return CollectionModel.of(shoppingLists, linkTo(methodOn(ShoppingListController.class).all()).withSelfRel());
+        return shoppingListService.getShoppingLists();
     }
 
-    @GetMapping("/shopping-lists/{id}")
-    EntityModel<ShoppingList> one(@PathVariable Long id)
+    @PostMapping("/")
+    public void createShoppingList(@RequestBody ShoppingList shoppingList)
     {
-        ShoppingList shoppingList = repository.findById(id)
-                .orElseThrow(() -> new ShoppingListNotFoundException(id));
-
-        return assembler.toModel(shoppingList);
+        shoppingListService.addNewShoppingList(shoppingList);
     }
 
-    @PostMapping("/shopping-lists")
-    ResponseEntity<?> newShoppingList(@RequestBody ShoppingList newShoppingList)
+    @GetMapping("/{id}")
+    public Optional<ShoppingList> getShoppingList(@PathVariable Long id)
     {
-        EntityModel<ShoppingList> entityModel = assembler.toModel(repository.save(newShoppingList));
-
-        return ResponseEntity
-                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(entityModel);
+        return shoppingListService.getShoppingListById(id);
     }
 
+    @PutMapping("/{id}")
+    public void updateShoppingList(@RequestBody ShoppingList shoppingList, @PathVariable Long id)
+    {
+        shoppingListService.updateShoppingList(id, shoppingList);
+    }
 
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id)
+    {
+        shoppingListService.deleteShoppingList(id);
+    }
 }
+
+

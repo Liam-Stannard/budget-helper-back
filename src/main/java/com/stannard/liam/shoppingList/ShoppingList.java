@@ -1,27 +1,40 @@
 package com.stannard.liam.shoppingList;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.stannard.liam.shoppingItem.ShoppingItem;
+import com.stannard.liam.user.User;
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 
 import java.util.List;
 
 @Entity
 @Table(name = "shopping_list")
-public class ShoppingList {
+
+public class ShoppingList
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
-    @ElementCollection
-    @OneToMany(mappedBy = "shoppingList", cascade=CascadeType.ALL)
+
+    @ManyToOne
+    @JsonBackReference
+    private User user;
+
+    @OneToMany(mappedBy = "shoppingList")
     private List<ShoppingItem> items;
 
-    ShoppingList() {
+    public ShoppingList()
+    {
 
     }
 
-    ShoppingList(String name, List<ShoppingItem> items) {
+    ShoppingList(String name, List<ShoppingItem> items)
+    {
         this.name = name;
         this.items = items;
     }
@@ -48,6 +61,16 @@ public class ShoppingList {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
     }
 }
 
