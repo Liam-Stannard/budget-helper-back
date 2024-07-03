@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.hateoas.EntityModel;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +37,13 @@ public class UserController
     }
 
     @GetMapping("/{id}")
-    public Optional<UserDTO> getUser(@PathVariable Long id)
+    public ResponseEntity<Optional<UserDTO>> getUser(@PathVariable Long id)
     {
-        return userService.getUserById(id);
+        Optional<UserDTO> userDTO = userService.getUserById(id);
+
+        return ResponseEntity.ok(userDTO);
+
+
     }
 
     @PutMapping("/{id}")

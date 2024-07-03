@@ -12,9 +12,18 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest
 {
     private String username;
+    private Role role;
     private String email;
     private String password;
-    private Role role;
+
+
+    public RegisterRequest(String username, Role role,  String email, String password) {
+        this.username = username;
+        this.role = role;
+        this.email = email;
+        this.password = password;
+
+    }
 
     public String getUsername()
     {

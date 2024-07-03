@@ -54,13 +54,20 @@ public class ShoppingListService
         }
 
         shoppingList.setUser(user.get());
+        shoppingListRepository.save(shoppingList);
+
         List<ShoppingItem> items = shoppingList.getItems();
         if(!items.isEmpty())
         {
-         System.out.println("Items are the following: "+ items.toString());
-         //shoppingItemRepository.saveAll(items);
+            System.out.println("Items are the following: "+ items.toString());
+
+            for(int i = 0; i< items.size(); i ++)
+            {
+                ShoppingItem item = new ShoppingItem(items.get(i).getName(), shoppingList);
+                shoppingItemRepository.save(item);
+            }
         }
-        shoppingListRepository.save(shoppingList);
+
     }
 
     public void updateShoppingList(Long id, ShoppingList shoppingListUpdate)

@@ -1,21 +1,15 @@
 package com.stannard.liam.shoppingItem;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stannard.liam.shoppingList.ShoppingList;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 @Entity
 @Table(name = "shopping_list_item")
 public class ShoppingItem
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     @ManyToOne
@@ -26,7 +20,6 @@ public class ShoppingItem
     {
 
     }
-
     public ShoppingItem(String name, ShoppingList shoppingList)
     {
         this.name = name;

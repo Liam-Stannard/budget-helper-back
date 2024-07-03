@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
@@ -21,6 +23,10 @@ public class JwtService
     //Todo needs to be a env var in application properties
     private static final String secretKey = "397A24432646294A404E635266556A576E5A7234753778214125442A472D4B61";
 
+    private long jwtExpiration = 1000000000;
+
+    private long refreshExpiration = 1000000;
+
     public String extractUsername(String token)
     {
         return extractClaim(token, Claims::getSubject);
@@ -32,22 +38,31 @@ public class JwtService
         return claimResolver.apply(claims);
     }
 
+    public String generateToken(UserDetails userDetails)
+    {
+        return generateToken(new HashMap<>(), userDetails);
+    }
+
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails)
     {
-        final int oneDayInMilliSeconds = 1000 * 60 * 60 * 24;
+        return buildToken(extraClaims, userDetails, jwtExpiration);
+    }
+
+    public String generateRefreshToken(UserDetails userDetails)
+    {
+        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+    }
+
+    private String buildToken(Map<String, Object> extraClaims,  UserDetails userDetails, long expiration)
+    {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + oneDayInMilliSeconds))
-                .signWith(SignatureAlgorithm.HS256, getSignInKey())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
-    }
-
-    public String generateToken(UserDetails userDetails)
-    {
-        return generateToken(new HashMap<>(), userDetails);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails)
@@ -74,8 +89,6 @@ public class JwtService
                 .parseClaimsJws(token)
                 .getBody();
     }
-
-
 
     private Key getSignInKey()
     {
