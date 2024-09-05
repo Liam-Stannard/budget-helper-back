@@ -2,32 +2,32 @@ package com.stannard.liam.auth;
 
 public class AuthenticationResponse
 {
-    private String accessToken;
-    private String refreshToken;
+    private String access;
+    private String refresh;
 
-    public AuthenticationResponse(String accessToken, String refreshToken )
+    public AuthenticationResponse(String accessToken, String refresh)
     {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+        this.access = accessToken;
+        this.refresh = refresh;
     }
 
-    public String getAccessToken()
+    public String getAccess()
     {
-        return accessToken;
+        return access;
     }
 
-    public void setRefreshToken(String accessToken)
+    public void setRefresh(String accessToken)
     {
-        this.accessToken = accessToken;
+        this.access = accessToken;
     }
 
-    public void setAccessToken(String accessToken)
+    public void setAccess(String access)
     {
-        this.accessToken = accessToken;
+        this.access = access;
     }
 
-    public String getRefreshToken()
+    public String getRefresh()
     {
-        return refreshToken;
+        return refresh;
     }
 }
