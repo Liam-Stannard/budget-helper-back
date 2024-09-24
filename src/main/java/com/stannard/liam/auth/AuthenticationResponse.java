@@ -1,33 +1,16 @@
 package com.stannard.liam.auth;
 
-public class AuthenticationResponse
-{
-    private String access;
-    private String refresh;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    public AuthenticationResponse(String accessToken, String refresh)
-    {
-        this.access = accessToken;
-        this.refresh = refresh;
-    }
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class AuthenticationResponse {
 
-    public String getAccess()
-    {
-        return access;
-    }
-
-    public void setRefresh(String accessToken)
-    {
-        this.access = accessToken;
-    }
-
-    public void setAccess(String access)
-    {
-        this.access = access;
-    }
-
-    public String getRefresh()
-    {
-        return refresh;
-    }
+  private String access;
+  private String refresh;
 }

@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/springboot_app_test
+    username: root
+    password: root
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+application:
+  security:
+    jwt:
+      secret-key: 397A24432646294A404E635266556A576E5A7234753778214125442A472D4B61
+      access-token:
+        expiration: 86400000
+      refresh-token:
+        expiration: 604800000

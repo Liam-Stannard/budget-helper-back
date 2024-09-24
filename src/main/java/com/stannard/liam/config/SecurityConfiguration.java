@@ -12,38 +12,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration
-{
-    @Autowired
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    @Autowired
-    private final AuthenticationProvider authenticationProvider;
+public class SecurityConfiguration {
 
-    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, AuthenticationProvider authenticationProvider)
-    {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.authenticationProvider = authenticationProvider;
-    }
+  @Autowired
+  private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  @Autowired
+  private final AuthenticationProvider authenticationProvider;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception
-    {
-        httpSecurity
-                .csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+  public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
+      AuthenticationProvider authenticationProvider) {
+    this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    this.authenticationProvider = authenticationProvider;
+  }
 
-        return httpSecurity.build();
-    }
-    
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity.csrf().disable().authorizeHttpRequests().requestMatchers("/api/v1/auth/**")
+        .permitAll().anyRequest().authenticated().and().sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+        .authenticationProvider(authenticationProvider)
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+    return httpSecurity.build();
+  }
+
 }
