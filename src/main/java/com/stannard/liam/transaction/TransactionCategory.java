@@ -1,11 +1,11 @@
-package com.stannard.liam.transaction.expense;
+package com.stannard.liam.transaction;
 
-public enum ExpenseCategory {
+public enum TransactionCategory {
   FOOD("Food"), BILL("Bill"), SUBSCRIPTION("Subscription"), CLOTHING("Clothing");
 
   private final String name;
 
-  ExpenseCategory(String name) {
+  TransactionCategory(String name) {
     this.name = name;
   }
 

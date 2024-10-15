@@ -1,8 +1,8 @@
 package com.stannard.liam.config;
 
-import com.stannard.liam.transaction.expense.Expense;
-import com.stannard.liam.transaction.expense.ExpenseCategory;
-import com.stannard.liam.transaction.expense.ExpenseRepository;
+import com.stannard.liam.transaction.Transaction;
+import com.stannard.liam.transaction.TransactionCategory;
+import com.stannard.liam.transaction.TransactionRepository;
 import com.stannard.liam.user.Role;
 import com.stannard.liam.user.User;
 import com.stannard.liam.user.UserService;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class DevStartup implements CommandLineRunner {
 
   @Autowired
-  private final ExpenseRepository expenseRepository;
+  private final TransactionRepository transactionRepository;
 
   @Autowired
   private final UserService userService;
@@ -24,9 +24,9 @@ public class DevStartup implements CommandLineRunner {
   @Autowired
   PasswordEncoder passwordEncoder;
 
-  public DevStartup(ExpenseRepository expenseRepository, UserService userService,
+  public DevStartup(TransactionRepository transactionRepository, UserService userService,
       PasswordEncoder passwordEncoder) {
-    this.expenseRepository = expenseRepository;
+    this.transactionRepository = transactionRepository;
     this.userService = userService;
     this.passwordEncoder = passwordEncoder;
   }
@@ -44,13 +44,26 @@ public class DevStartup implements CommandLineRunner {
 
     userService.addNewUser(user);
 
-    Expense e1 = new Expense("Meal Out", "100.00", ExpenseCategory.FOOD, new Date(), "Main");
-    Expense e2 = new Expense("Electricity", "170.00", ExpenseCategory.BILL, new Date(), "Main");
+    Transaction e1 = Transaction.builder()
+        .category(TransactionCategory.BILL)
+        .title("Electric")
+        .date(new Date())
+        .account("Main")
+        .amount("100.00")
+        .build();
+
+    Transaction e2 = Transaction.builder()
+        .category(TransactionCategory.FOOD)
+        .title("Food shop")
+        .date(new Date())
+        .account("Main")
+        .amount("100.00")
+        .build();
 
     e1.setUser(user);
     e2.setUser(user);
-    expenseRepository.save(e1);
-    expenseRepository.save(e2);
+    transactionRepository.save(e1);
+    transactionRepository.save(e2);
 
 
   }

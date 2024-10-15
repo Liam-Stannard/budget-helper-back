@@ -1,4 +1,4 @@
-package com.stannard.liam.transaction.expense;
+package com.stannard.liam.transaction;
 
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -7,11 +7,11 @@ import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ExpenseRepository extends JpaRepository<Expense, Long> {
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
   @NotNull
   @PostFilter("filterObject.user.getId() == principal.id")
   @Override
-  List<Expense> findAll();
+  List<Transaction> findAll();
 
 }

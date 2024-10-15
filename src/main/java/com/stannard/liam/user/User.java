@@ -1,7 +1,7 @@
 package com.stannard.liam.user;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.stannard.liam.transaction.expense.Expense;
+import com.stannard.liam.transaction.Transaction;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -43,7 +43,7 @@ public class User implements UserDetails {
 
   @OneToMany(mappedBy = "user")
   @JsonManagedReference
-  private List<Expense> expenses;
+  private List<Transaction> transactions;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
