@@ -1,6 +1,7 @@
 package com.stannard.liam.transaction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.stannard.liam.account.Account;
 import com.stannard.liam.user.User;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -47,10 +48,11 @@ public class Transaction {
   private String amount;
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private Date date;
-  private String account;
+  @ManyToOne
+  private Account account;
 
   public Transaction(TransactionCategory category, String title, String amount, Date date,
-      String account) {
+      Account account) {
     this.category = category;
     this.title = title;
     this.amount = amount;

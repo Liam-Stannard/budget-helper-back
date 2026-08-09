@@ -1,5 +1,7 @@
 package com.stannard.liam.config;
 
+import com.stannard.liam.account.Account;
+import com.stannard.liam.account.AccountRepository;
 import com.stannard.liam.transaction.Transaction;
 import com.stannard.liam.transaction.TransactionCategory;
 import com.stannard.liam.transaction.TransactionRepository;
@@ -19,14 +21,19 @@ public class DevStartup implements CommandLineRunner {
   private final TransactionRepository transactionRepository;
 
   @Autowired
+  private final AccountRepository accountRepository;
+
+  @Autowired
   private final UserService userService;
 
   @Autowired
   PasswordEncoder passwordEncoder;
 
-  public DevStartup(TransactionRepository transactionRepository, UserService userService,
+  public DevStartup(TransactionRepository transactionRepository,
+      AccountRepository accountRepository, UserService userService,
       PasswordEncoder passwordEncoder) {
     this.transactionRepository = transactionRepository;
+    this.accountRepository = accountRepository;
     this.userService = userService;
     this.passwordEncoder = passwordEncoder;
   }
@@ -44,11 +51,17 @@ public class DevStartup implements CommandLineRunner {
 
     userService.addNewUser(user);
 
+    Account mainAccount = Account.builder()
+        .name("Main")
+        .user(user)
+        .build();
+    accountRepository.save(mainAccount);
+
     Transaction e1 = Transaction.builder()
         .category(TransactionCategory.BILL)
         .title("Electric")
         .date(new Date())
-        .account("Main")
+        .account(mainAccount)
         .amount("100.00")
         .build();
 
@@ -56,7 +69,7 @@ public class DevStartup implements CommandLineRunner {
         .category(TransactionCategory.FOOD)
         .title("Food shop")
         .date(new Date())
-        .account("Main")
+        .account(mainAccount)
         .amount("100.00")
         .build();
 
