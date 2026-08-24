@@ -25,9 +25,9 @@ public class TransactionController {
   }
 
   @GetMapping("")
-  public ResponseEntity<Object> getTransactions() {
+  public ResponseEntity<Object> getTransactionList() {
     return ResponseEntity.ok().body(new HashMap<>() {{
-      put("transactions", transactionService.getTransactions());
+      put("transactionList", transactionService.getTransactionList());
     }});
   }
 
